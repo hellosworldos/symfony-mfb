@@ -1,0 +1,22 @@
+mfbdb:
+  image: paulczar/percona-galera
+  container_name: mfb_db
+  expose:
+    - 3306
+  environment:
+    MYSQL_USER: mfb
+    MYSQL_PASS: mfb
+    MYSQL_DBNAME: mfb
+
+mfbwebserver:
+  container_name: mfb_webserver
+  build: /var/www/symfony-mfb/docker
+  volumes:
+    - /var/www/symfony-mfb:/var/www/symfony_volume
+  links:
+    - mfbdb:db
+  environment:
+    IS_DEV: 1
+    VIRTUAL_HOST: mfb.dev
+  expose:
+    - 80
